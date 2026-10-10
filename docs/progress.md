@@ -36,4 +36,6 @@ Frontend request regression confirms Light’s optional cave text is not sent wi
 
 Time strength is 0.85 with 64 pixels of crop context. Its sampling schedule preserves 15 actual denoising steps in the CPU profile rather than reducing quality at the lower strength. Force and resolved positive prompt are logged locally with settings for future diagnosis. Ground and mountain model probes yielded vegetation with no caves, and exact pixel preservation outside the expanded masks passed. User images and probes remain in ignored runtime storage.
 
-Larger tree canopies are still constrained by the original 12-pixel edit expansion. Upward-growth expansion awaits the user’s preference; existing boundary preservation remains in force.
+The user approved nearby upward growth. Time now extends its edit mask upward by one sixth of the canvas height, retaining the original lateral and downward bounds. Water and Light retain their original masks. Geometry and compositing regression tests check this boundary and exact preservation outside it.
+
+Live upward-mask probes completed in 44.60 seconds on ground and 36.85 seconds on mountains. Both preserved every pixel outside the enlarged blend mask and added no caves. The mountain result included trees and green vegetation; the ground result produced taller reeds/shrubs rather than reliable mature tree canopies. Exact semantic vegetation remains seed- and context-dependent.

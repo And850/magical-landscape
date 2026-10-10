@@ -60,7 +60,7 @@ for size, steps in profiles:
             )
             stream = io.BytesIO()
             painted.save(stream, format="PNG")
-            mask, blend = prepare_mask(stream.getvalue(), size)
+            mask, blend = prepare_mask(stream.getvalue(), size, force=force)
             start = time.monotonic()
             image = engine.transform(image, mask, blend, force, "", 100 + i, progress)
             image.save(out / f"{force}-{size}.png")

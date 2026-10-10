@@ -104,3 +104,21 @@ def test_default_time_prompt_does_not_request_new_ruins_or_structures():
     assert "trees" in prompt and "vines" in prompt and "roots" in prompt
     for unwanted in ("ruins", "structures", "cave", "tower"):
         assert unwanted not in prompt
+
+
+def test_time_allows_upward_canopies_without_spreading_downward():
+    painted = np.zeros((384, 384), np.uint8)
+    painted[240:260, 180:200] = 255
+    original, _ = imaging.prepare_mask(png(painted), 384)
+    grown, blend = imaging.prepare_mask(png(painted), 384, force="growth_time")
+    mask = np.asarray(grown)
+    assert mask[180, 190] == 255
+    assert mask[150, 190] == 0
+    assert np.array_equal(mask[260:], np.asarray(original)[260:])
+    before = Image.new("RGB", (384, 384), "blue")
+    after = imaging.composite(before, Image.new("RGB", (384, 384), "green"), blend)
+    outside = np.asarray(blend) == 0
+    assert np.array_equal(np.asarray(after)[outside], np.asarray(before)[outside])
+    for force in ("water", "light"):
+        unchanged, _ = imaging.prepare_mask(png(painted), 384, force=force)
+        assert np.array_equal(np.asarray(unchanged), np.asarray(original))

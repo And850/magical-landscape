@@ -73,7 +73,7 @@ for force in ("growth_time", "water", "light"):
         fill=255,
     )
     data = png(painted)
-    _, blend = prepare_mask(data, size)
+    _, blend = prepare_mask(data, size, force=force)
     before = image.copy()
     old = w
     w, image = wait(

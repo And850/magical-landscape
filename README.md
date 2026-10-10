@@ -44,7 +44,7 @@ React/TypeScript/Vite and Canvas 2D frontend; FastAPI/Pillow/OpenCV/PyTorch/Diff
 
 - Initial generation: Stable Diffusion 1.5 with Canny ControlNet, using `StableDiffusionControlNetImg2ImgPipeline`.
 - Evolution: Stable Diffusion 1.5 inpainting, using `StableDiffusionInpaintPipeline`.
-- Inpainting crops around the selected mask with 64 pixels of context for Time and 32 for Water/Light so small edits receive useful detail. Masks expand by 12 pixels and feather inward over 8 pixels. Compositing leaves everything outside the expanded mask untouched.
+- Inpainting crops around the selected mask with 64 pixels of context for Time and 32 for Water/Light so small edits receive useful detail. Masks expand by 12 pixels. Time also extends upward by one sixth of the canvas height (64 pixels at 384, 85 at 512), allowing nearby canopies to grow. All masks feather inward over 8 pixels. Compositing leaves everything outside the expanded mask untouched.
 - One pipeline and one job are resident at a time; ControlNet is unloaded before inpainting loads.
 - Metal is selected automatically when available. Otherwise the interface explicitly shows slower CPU generation; CPU computes in float32.
 - Native Metal default: 512 × 512, 20 steps. Reduced/CPU profile: 384 × 384, 15 steps. The drawing label map remains 512 × 512 and is resized with nearest-neighbor sampling. Composition guidance is approximate; individual objects and exact proportions are not guaranteed.

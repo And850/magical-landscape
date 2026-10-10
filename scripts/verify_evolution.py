@@ -30,7 +30,7 @@ for force in ("growth_time", "water", "light"):
     stream = io.BytesIO()
     m.save(stream, format="PNG")
     data = stream.getvalue()
-    _, blend = prepare_mask(data, size)
+    _, blend = prepare_mask(data, size, force=force)
     start = time.monotonic()
     r = client.post(
         "/api/worlds/" + w["id"] + "/transform",

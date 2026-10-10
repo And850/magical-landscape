@@ -110,7 +110,7 @@ def prepare_landscape(labels: Image.Image, size: int):
     return color, Image.fromarray(edge).convert("RGB"), "; ".join(phrases)
 
 
-def prepare_mask(data: bytes, size: int):
+def prepare_mask(data: bytes, size: int, force: str | None = None):
     image = read_png(data)
     if image.size != (size, size):
         raise ValueError("Mask dimensions must match the current world.")
@@ -130,6 +130,10 @@ def prepare_mask(data: bytes, size: int):
     expanded = cv2.dilate(
         binary, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25))
     )
+    if force == "growth_time":
+        # Give canopies space above the strokes without extending downhill.
+        rise = round(size / 6)
+        expanded = cv2.dilate(expanded, np.ones((rise + 1, 1), np.uint8), anchor=(0, 0))
     # Padding gives a proper inward feather even for masks touching an image edge.
     distance = cv2.distanceTransform(np.pad(expanded, 1), cv2.DIST_L2, 5)[1:-1, 1:-1]
     blend = (np.clip(distance / 8, 0, 1) * 255).astype(np.uint8)

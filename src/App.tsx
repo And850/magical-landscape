@@ -35,8 +35,8 @@ const FORCES = [
     color: "#a1b887",
     icon: Leaf,
     description:
-      "Let centuries pass. Forests mature, roots spread, and nature reclaims the old.",
-    example: "Ancient roots reclaim this tower",
+      "Let centuries pass. Trees grow upward near your strokes, roots spread, and vines reclaim the land.",
+    example: "Mature trees and climbing vines reclaim this hillside",
   },
   {
     id: "water" as Force,

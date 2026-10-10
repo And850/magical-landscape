@@ -145,7 +145,7 @@ class WorldService:
         meta, image = self.store.read(world_id)
         if meta["revision"] != expected_revision:
             raise Conflict("The world changed. Refresh and retry.")
-        mask, blend = prepare_mask(data, meta["size"])
+        mask, blend = prepare_mask(data, meta["size"], force=force)
 
         def operation(seed, report, job_id):
             current, current_image = self.store.read(world_id)
