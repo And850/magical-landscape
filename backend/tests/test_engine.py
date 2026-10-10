@@ -85,6 +85,7 @@ def test_generation_logs_seed_settings_and_model_revisions(tmp_path, monkeypatch
     assert path.exists()
     entry = json.loads(path.read_text().splitlines()[-1])
     assert entry["seed"] == 8741 and entry["size"] == 384 and entry["device"] == "cpu"
+    assert entry["force"] == "light"
     assert (
         entry["steps"] == 15
         and entry["strength"] == 0.95

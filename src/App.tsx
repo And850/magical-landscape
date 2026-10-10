@@ -239,6 +239,7 @@ export default function App() {
   function chooseForce(next: Force) {
     if (disabled || next === force) return;
     setForce(next);
+    setText("");
     pixels.fill(0);
     bump();
     setError("");

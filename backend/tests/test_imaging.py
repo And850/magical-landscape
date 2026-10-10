@@ -97,3 +97,10 @@ def test_thin_water_region_describes_its_route_instead_of_only_its_centroid():
     labels[:] = 3
     _, _, sea = imaging.prepare_landscape(Image.fromarray(labels), 384)
     assert "dominates" in sea and "winding river" not in sea
+
+
+def test_default_time_prompt_does_not_request_new_ruins_or_structures():
+    prompt = imaging.force_prompt("growth_time", "")
+    assert "trees" in prompt and "vines" in prompt and "roots" in prompt
+    for unwanted in ("ruins", "structures", "cave", "tower"):
+        assert unwanted not in prompt

@@ -26,7 +26,7 @@ If the environment is already installed, only run `./scripts/run.sh`. Stop exist
 1. Paint regions with **Sky, Ground, Hills/Mountains, Water, Trees/Vegetation, Rocks, and Structures**. Unpainted space is sky. Later strokes replace earlier labels. At least one non-Sky region is required.
 2. Select **Bring world to life**. The drawing's colors, boundaries, and semantic positions guide the illustration.
 3. Choose **Time**, **Water**, or **Light**, paint the region to change, optionally describe its magic, and select **Apply magic**.
-4. Repeat on the current world. Changing force clears pending strokes. **Clear strokes** clears unapplied marks only. **Reset canvas** starts over with a blank sketch, clearing the artwork, pending strokes, optional text, and saved world selection. Reset is disabled during generation.
+4. Repeat on the current world. Changing force clears pending strokes and optional text. **Clear strokes** clears unapplied marks only. **Reset canvas** starts over with a blank sketch, clearing the artwork, pending strokes, optional text, and saved world selection. Reset is disabled during generation.
 
 Brush sizes range from 8 to 96 pixels, default 32. Optional text is limited to 200 characters. Drawing and submission are disabled during generation; the app shows actual diffusion-step progress. A failed generation retains the image, strokes, and text. Refresh restores the current world and resumes a known pending job.
 
@@ -44,11 +44,11 @@ React/TypeScript/Vite and Canvas 2D frontend; FastAPI/Pillow/OpenCV/PyTorch/Diff
 
 - Initial generation: Stable Diffusion 1.5 with Canny ControlNet, using `StableDiffusionControlNetImg2ImgPipeline`.
 - Evolution: Stable Diffusion 1.5 inpainting, using `StableDiffusionInpaintPipeline`.
-- Inpainting crops around the selected mask with 32 pixels of context so small edits receive useful detail. Masks expand by 12 pixels and feather inward over 8 pixels. Compositing leaves everything outside the expanded mask untouched.
+- Inpainting crops around the selected mask with 64 pixels of context for Time and 32 for Water/Light so small edits receive useful detail. Masks expand by 12 pixels and feather inward over 8 pixels. Compositing leaves everything outside the expanded mask untouched.
 - One pipeline and one job are resident at a time; ControlNet is unloaded before inpainting loads.
 - Metal is selected automatically when available. Otherwise the interface explicitly shows slower CPU generation; CPU computes in float32.
 - Native Metal default: 512 × 512, 20 steps. Reduced/CPU profile: 384 × 384, 15 steps. The drawing label map remains 512 × 512 and is resized with nearest-neighbor sampling. Composition guidance is approximate; individual objects and exact proportions are not guaranteed.
-- Initial defaults were tuned after flat-image failures: strength **1.0**, ControlNet scale **0.30**, guidance ending at **0.6**. Magical edits use strength **0.95**; both pipelines use guidance scale **7**.
+- Initial defaults were tuned after flat-image failures: strength **1.0**, ControlNet scale **0.30**, guidance ending at **0.6**. Time uses strength **0.85** and keeps the profile’s actual diffusion-step count; Water/Light use strength **0.95**. Both pipelines use guidance scale **7**. Time prompts vegetation and weathered existing surfaces, rather than asking for new ruins or structures.
 - Thin, elongated water regions include a coarse river route rather than only their centroid. Only painted categories appear; dominant regions are identified without inventing unpainted terrain. The fixed art prompt and selected force come before optional text. Stable Diffusion's text encoder has a finite token budget, so unusually dense descriptions may be truncated.
 
 Model revisions are pinned in `model-revisions.json`; Python and Node dependencies are locked. Model licenses are CreativeML OpenRAIL-M for the Stable Diffusion models and the license listed on the ControlNet model card. Model output checking remains enabled.

@@ -28,7 +28,7 @@ COLORS = np.array(
 )
 STYLE = "dreamlike fantasy landscape, painterly illustration, magical atmosphere, coherent terrain, detailed environmental art"
 RULES = {
-    "growth_time": "ancient massive mature forest, tangled gigantic roots and vines reclaim weathered stone structures, thick moss on eroded ruins, nature taking over aged buildings",
+    "growth_time": "a fantasy landscape overgrown with mature trees, dense green foliage, spreading tree roots, climbing vines and thick moss covering existing terrain, weathered surfaces, painterly illustration",
     "water": "flooded terrain, reflective blue pools, flowing water carving deep channels, partially submerged stone structures, modest vegetation along wet edges",
     "light": "brilliant golden magical light rays, bioluminescent flowers and vines glowing gold, ancient structures awakened with radiant golden symbols, luminous pathways, sparkling golden particles",
 }
@@ -146,7 +146,8 @@ def force_prompt(force: str, text: str):
         raise ValueError("Choose Time, Water, or Light.")
     if len(text) > 200:
         raise ValueError("Optional text must be 200 characters or fewer.")
-    return f"{RULES[force]}. {STYLE}. " + (
+    style = "" if force == "growth_time" else f"{STYLE}. "
+    return f"{RULES[force]}. {style}" + (
         f"Additional detail within this effect: {text.strip()}." if text.strip() else ""
     )
 

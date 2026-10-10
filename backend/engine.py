@@ -3,6 +3,7 @@
 import gc
 import json
 import logging
+import math
 import os
 import time
 from pathlib import Path
@@ -127,14 +128,19 @@ class DiffusionEngine:
         pipe.set_progress_bar_config(disable=True)
         self.pipe, self.mode = pipe, mode
 
-    def _run(self, mode, seed, kwargs, report):
+    def _run(self, mode, seed, kwargs, report, force=None):
         import torch
 
         start = time.monotonic()
         for attempt in range(2):
             self.load(mode, report)
             strength = kwargs.get("strength", 1)
-            effective_steps = max(1, int(self.steps * strength))
+            inference_steps = (
+                math.ceil(self.steps / strength)
+                if force == "growth_time"
+                else self.steps
+            )
+            effective_steps = max(1, int(inference_steps * strength))
             report("Generating illustration", 0, effective_steps)
 
             def callback(pipe, step, timestep, callback_kwargs):
@@ -144,8 +150,13 @@ class DiffusionEngine:
             try:
                 output = self.pipe(
                     **kwargs,
-                    negative_prompt=NEGATIVE,
-                    num_inference_steps=self.steps,
+                    negative_prompt=NEGATIVE
+                    + (
+                        ", people, human figures, animals, portraits, buildings, caves"
+                        if force == "growth_time"
+                        else ""
+                    ),
+                    num_inference_steps=inference_steps,
                     guidance_scale=7,
                     generator=torch.Generator(device="cpu").manual_seed(seed),
                     callback_on_step_end=callback,
@@ -155,6 +166,10 @@ class DiffusionEngine:
                     json.dumps(
                         {
                             "mode": mode,
+                            "force": force,
+                            "prompt": kwargs.get("prompt"),
+                            "inference_steps": inference_steps,
+                            "effective_steps": effective_steps,
                             "seed": seed,
                             "size": self.size,
                             "steps": self.steps,
@@ -207,11 +222,12 @@ class DiffusionEngine:
                 mask_image=mask,
                 width=image.width,
                 height=image.height,
-                padding_mask_crop=32,
+                padding_mask_crop=64 if force == "growth_time" else 32,
                 prompt=force_prompt(force, text),
-                strength=0.95,
+                strength=0.85 if force == "growth_time" else 0.95,
             ),
             report,
+            force=force,
         )
         return composite(image, generated, blend)
 

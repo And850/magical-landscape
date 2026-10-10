@@ -6,7 +6,7 @@ The approved Magical Landscape app is implemented with the agreed seven landscap
 - Generation: two deliberately different layouts produced recognizable fantasy scenery. Initial defaults needed tuning to avoid flat diagrams: strength 1.0, ControlNet scale 0.25 ending at 0.6. Regional edits use a 32-pixel context crop after early Light results proved too subtle.
 - State/API: serialized jobs, atomic commits, stale-revision protection, preserved current image on failure, current-world restoration, interrupted-job recovery, localhost Host/Origin checks.
 - Frontend: Canvas drawing, labeled region map, force masks, brush sizing, optional text, clear pending strokes, explicit generation, polling/progress/errors and restoration.
-- Review: independent code review findings fixed with regression coverage. Automated verification: 22 backend tests, 8 frontend tests, production build. Browser test source is supplied but browser execution is unavailable.
+- Review: independent code review findings fixed with regression coverage. Automated verification: 23 backend tests, 9 frontend tests, production build. Browser test source is supplied but browser execution is unavailable.
 - Real workflow: initial generation, cumulative Time, Water and Light through the API. Exact pixel preservation outside expanded masks checked for every edit. First initial runs took 87.23 and 91.34 seconds on CPU at 384/15. Final regional timings are in assets/measurements.json.
 - Submission: README, under-500-word write-up, genuine-output results reel under three minutes, public source repository under And850.
 
@@ -29,3 +29,11 @@ Reset canvas clears the entire frontend canvas, image, text, tool settings and s
 Initial composition guidance increased from 0.25 to 0.30. Larger 0.35–0.40 probes and reduced noise produced overly flat pictures, so strength 1.0 and guidance end 0.6 remain. The original art prompt is retained; thin elongated water labels include a coarse route inferred from their endpoints. These remain visual hints, not exact tracing or segmentation constraints.
 
 Visual comparison on the saved user doodle: a river was not reliably recovered with this Canny model. The adjustment is a modest guidance increase, not a verified exact-layout solution. User images remain in ignored local runtime storage.
+
+## Time force correction
+
+Frontend request regression confirms Light’s optional cave text is not sent with a subsequent Time request. Changing force now explicitly clears optional text as well as strokes. Time’s old built-in prompt requested weathered stone structures and eroded ruins; this introduced a strong unwanted architectural bias even with empty user text. The new default requests trees, roots, vines, moss and weathered existing surfaces. A Time-specific negative prompt discourages caves, buildings and figures.
+
+Time strength is 0.85 with 64 pixels of crop context. Its sampling schedule preserves 15 actual denoising steps in the CPU profile rather than reducing quality at the lower strength. Force and resolved positive prompt are logged locally with settings for future diagnosis. Ground and mountain model probes yielded vegetation with no caves, and exact pixel preservation outside the expanded masks passed. User images and probes remain in ignored runtime storage.
+
+Larger tree canopies are still constrained by the original 12-pixel edit expansion. Upward-growth expansion awaits the user’s preference; existing boundary preservation remains in force.

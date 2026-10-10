@@ -315,3 +315,53 @@ it("resets a generated world to a blank sketch and does not restore it on refres
     ).disabled,
   ).toBe(true);
 });
+
+it("never sends Light's cave text with a subsequent Time request", async () => {
+  const originalFetch = globalThis.fetch;
+  const edits: { force: string; text: string }[] = [];
+  vi.stubGlobal("fetch", async (url: string, options?: RequestInit) => {
+    if (url.endsWith("/transform") && options?.method === "POST") {
+      const form = options.body as FormData;
+      edits.push({
+        force: String(form.get("force")),
+        text: String(form.get("text")),
+      });
+    }
+    return originalFetch(url, options);
+  });
+  render(<App />);
+  await waitFor(() =>
+    expect(screen.getByText("Local image generation")).toBeTruthy(),
+  );
+  draw();
+  fireEvent.click(screen.getByRole("button", { name: "Bring world to life" }));
+  await waitFor(() =>
+    expect(screen.getByRole("button", { name: "Apply magic" })).toBeTruthy(),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Light" }));
+  fireEvent.change(screen.getByLabelText("Describe the magic"), {
+    target: { value: "a glowing cave" },
+  });
+  draw();
+  fireEvent.click(screen.getByRole("button", { name: "Apply magic" }));
+  await waitFor(() =>
+    expect(
+      (screen.getByLabelText("Describe the magic") as HTMLTextAreaElement)
+        .value,
+    ).toBe(""),
+  );
+  fireEvent.change(screen.getByLabelText("Describe the magic"), {
+    target: { value: "another glowing cave" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Time" }));
+  expect(
+    (screen.getByLabelText("Describe the magic") as HTMLTextAreaElement).value,
+  ).toBe("");
+  draw();
+  fireEvent.click(screen.getByRole("button", { name: "Apply magic" }));
+  await waitFor(() => expect(edits.length).toBe(2));
+  expect(edits).toEqual([
+    { force: "light", text: "a glowing cave" },
+    { force: "growth_time", text: "" },
+  ]);
+});
