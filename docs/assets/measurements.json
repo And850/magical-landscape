@@ -1,0 +1,28 @@
+{
+  "device": "cpu",
+  "size": 384,
+  "steps": 15,
+  "records": [
+    {
+      "stage": "world-a",
+      "seconds": 87.23
+    },
+    {
+      "stage": "growth_time",
+      "seconds": 39.22
+    },
+    {
+      "stage": "water",
+      "seconds": 35.54
+    },
+    {
+      "stage": "light",
+      "seconds": 35.84
+    },
+    {
+      "stage": "world-b",
+      "seconds": 91.34
+    }
+  ],
+  "note": "Selected cumulative iterations, genuine local generation. Native Metal and browser visual QA unverified."
+}
