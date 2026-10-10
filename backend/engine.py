@@ -27,7 +27,7 @@ from backend.imaging import (
 MODELS = {
     "base": "stable-diffusion-v1-5/stable-diffusion-v1-5",
     "control": "lllyasviel/control_v11p_sd15_canny",
-    "inpaint": "stable-diffusion-v1-5/stable-diffusion-inpainting",
+    "inpaint": "Lykon/dreamshaper-8-inpainting",
 }
 NEGATIVE = "photograph, text, watermark, logo, blurry, low quality, distorted geometry"
 
@@ -122,7 +122,9 @@ class DiffusionEngine:
             )
         if pipe.safety_checker is None:
             raise RuntimeError("Model output checker is missing. Re-run model setup.")
-        pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+        pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+            pipe.scheduler.config, algorithm_type="dpmsolver++"
+        )
         pipe.enable_attention_slicing("max")
         pipe.to(self.device)
         pipe.set_progress_bar_config(disable=True)

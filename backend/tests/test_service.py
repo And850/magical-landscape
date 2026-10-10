@@ -241,3 +241,21 @@ def test_success_journal_failure_does_not_report_committed_world_failed(
     with TestClient(app) as c:
         w = make_world(c)
         assert c.get("/api/worlds/" + w["id"]).json()["revision"] == 1
+
+
+def test_health_requires_current_model_revisions(tmp_path, monkeypatch):
+    import backend.api as api
+
+    monkeypatch.setattr(api, "ROOT", tmp_path)
+    runtime = tmp_path / ".runtime"
+    runtime.mkdir()
+    pins = {"base": "base-v1", "control": "control-v1", "inpaint": "new-inpaint"}
+    (tmp_path / "model-revisions.json").write_text(json.dumps(pins))
+    manifest = runtime / "model-manifest.json"
+    manifest.write_text(json.dumps(pins | {"inpaint": "old-inpaint"}))
+    with TestClient(
+        api.create_app(tmp_path / "data"), base_url="http://127.0.0.1"
+    ) as c:
+        assert c.get("/api/health").json()["models_ready"] is False
+        manifest.write_text(json.dumps(pins))
+        assert c.get("/api/health").json()["models_ready"] is True

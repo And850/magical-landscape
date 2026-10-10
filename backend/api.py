@@ -72,7 +72,9 @@ def create_app(data_dir=None, engine=None):
         downloaded = False
         if manifest.exists():
             try:
-                downloaded = len(json.loads(manifest.read_text())) == 3
+                cached = json.loads(manifest.read_text())
+                pinned = json.loads((ROOT / "model-revisions.json").read_text())
+                downloaded = all(cached.get(key) == rev for key, rev in pinned.items())
             except (ValueError, OSError):
                 pass
         return {

@@ -43,7 +43,7 @@ These effects are artistic interpretations, not physics or gameplay. The current
 React/TypeScript/Vite and Canvas 2D frontend; FastAPI/Pillow/OpenCV/PyTorch/Diffusers backend.
 
 - Initial generation: Stable Diffusion 1.5 with Canny ControlNet, using `StableDiffusionControlNetImg2ImgPipeline`.
-- Evolution: Stable Diffusion 1.5 inpainting, using `StableDiffusionInpaintPipeline`.
+- Evolution: DreamShaper 8 Inpainting (an art-focused Stable Diffusion fine-tune), using `StableDiffusionInpaintPipeline`.
 - Inpainting crops around the selected mask with 64 pixels of context for Time and 32 for Water/Light so small edits receive useful detail. Masks expand by 12 pixels. Time also extends upward by one sixth of the canvas height (64 pixels at 384, 85 at 512), allowing nearby canopies to grow. All masks feather inward over 8 pixels. Compositing leaves everything outside the expanded mask untouched.
 - One pipeline and one job are resident at a time; ControlNet is unloaded before inpainting loads.
 - Metal is selected automatically when available. Otherwise the interface explicitly shows slower CPU generation; CPU computes in float32.
@@ -72,7 +72,9 @@ The implementation environment could not expose the Mac's Metal GPU and denied b
 
 Actual offline CPU generation at 384 × 384 / 15 steps produced two different landscapes in 87–91 seconds. Final regional edits completed in 35.54–39.22 seconds; measurements are in [measurements.json](docs/assets/measurements.json). The API verification checks every pixel outside the expanded mask after each successful edit.
 
-The results reel shows selected cumulative iterations from genuine local runs, with waiting periods omitted. It is not a browser interaction recording. Force effects vary by seed, region, and image context; golden illumination required a more focused edit.
+DreamShaper force-edit probes completed in 39–42 seconds with 4.1–4.8 GiB peak process memory. See [the model comparison](docs/model-comparison.md) for images, settings, and limitations.
+
+The results reel predates the DreamShaper upgrade and shows selected cumulative iterations from genuine local runs, with waiting periods omitted. It is not a browser interaction recording. Force effects vary by seed, region, and image context; golden illumination required a more focused edit.
 
 ## Storage and recovery
 
@@ -89,7 +91,8 @@ The [published schedule](https://www.bananahacks.tech/schedule) says Sunday Octo
 ## Credits
 
 - [Stable Diffusion 1.5](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5)
-- [Stable Diffusion inpainting](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-inpainting)
+- [DreamShaper 8 Inpainting](https://huggingface.co/Lykon/dreamshaper-8-inpainting) — selected force-edit model, CreativeML OpenRAIL-M.
+- [Stable Diffusion inpainting](https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-inpainting) — previous force-edit model and comparison baseline.
 - [ControlNet Canny](https://huggingface.co/lllyasviel/control_v11p_sd15_canny)
 - [Diffusers](https://github.com/huggingface/diffusers), [PyTorch](https://pytorch.org/), [FastAPI](https://fastapi.tiangolo.com/), [React](https://react.dev/), [Vite](https://vite.dev/), [OpenCV](https://opencv.org/), [Pillow](https://python-pillow.org/), [Lucide](https://lucide.dev/).
 - Codex assisted with planning, implementation, and testing. The app itself uses pretrained local diffusion models; no custom model was trained.

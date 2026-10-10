@@ -1,0 +1,20 @@
+[
+  {
+    "force": "growth_time",
+    "seconds": 46.12,
+    "revision": 2,
+    "preserved_outside": true
+  },
+  {
+    "force": "water",
+    "seconds": 32.42,
+    "revision": 3,
+    "preserved_outside": true
+  },
+  {
+    "force": "light",
+    "seconds": 35.51,
+    "revision": 4,
+    "preserved_outside": true
+  }
+]

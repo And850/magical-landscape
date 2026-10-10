@@ -96,3 +96,22 @@ def test_generation_logs_seed_settings_and_model_revisions(tmp_path, monkeypatch
         if getattr(handler, "baseFilename", "") == str(path):
             handler.close()
             engine.log.removeHandler(handler)
+
+
+def test_loading_deis_checkpoint_selects_our_dpm_solver(monkeypatch):
+    from backend.engine import DiffusionEngine
+    from diffusers import DEISMultistepScheduler, StableDiffusionInpaintPipeline
+
+    pipe = SimpleNamespace(
+        scheduler=DEISMultistepScheduler(algorithm_type="deis", solver_type="logrho"),
+        safety_checker=object(),
+        enable_attention_slicing=lambda *_: None,
+        to=lambda *_: None,
+        set_progress_bar_config=lambda **_: None,
+    )
+    monkeypatch.setattr(
+        StableDiffusionInpaintPipeline, "from_pretrained", lambda *_, **__: pipe
+    )
+    engine = DiffusionEngine(384, 15, device="cpu")
+    engine.load("transform", lambda *_: None)
+    assert pipe.scheduler.config.algorithm_type == "dpmsolver++"

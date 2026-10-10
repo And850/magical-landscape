@@ -14,7 +14,7 @@ The engineering challenge is preserving a recognizable, cumulative world rather 
 
 The frontend uses React, TypeScript, and Canvas 2D. The backend uses FastAPI, PyTorch, Diffusers, Pillow, and OpenCV. Models run locally; there is no paid inference API. One pipeline is resident at a time to reduce memory use. The effects are artistic interpretations rather than physical simulation.
 
-We used pretrained Stable Diffusion 1.5, Stable Diffusion inpainting, and Canny ControlNet. Model and library credits are in the README. Codex assisted with planning, coding, and testing. No custom model was trained.
+We used pretrained Stable Diffusion 1.5, DreamShaper 8 Inpainting, and Canny ControlNet. Model and library credits are in the README. Codex assisted with planning, coding, and testing. No custom model was trained.
 
 ## Submission links
 

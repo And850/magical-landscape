@@ -39,3 +39,11 @@ Time strength is 0.85 with 64 pixels of crop context. Its sampling schedule pres
 The user approved nearby upward growth. Time now extends its edit mask upward by one sixth of the canvas height, retaining the original lateral and downward bounds. Water and Light retain their original masks. Geometry and compositing regression tests check this boundary and exact preservation outside it.
 
 Live upward-mask probes completed in 44.60 seconds on ground and 36.85 seconds on mountains. Both preserved every pixel outside the enlarged blend mask and added no caves. The mountain result included trees and green vegetation; the ground result produced taller reeds/shrubs rather than reliable mature tree canopies. Exact semantic vegetation remains seed- and context-dependent.
+
+## Force model upgrade
+
+Selected DreamShaper 8 Inpainting after same-image, same-mask, same-seed probes: clearer mountain trees, reflective water, and golden symbols/pathways. Four independent edits took 39.11–41.59 seconds, with peak process RSS of 4.14–4.84 GiB on CPU. Ground trees remain inconsistent. See model-comparison.md for images and the SDXL execution-path limitation.
+
+Pinned the model revision and retained safety checking, one resident pipeline, existing masks, and compositing. Explicitly select DPM-Solver++ when converting the checkpoint's DEIS scheduler configuration. A regression reproduces the previous incompatible algorithm configuration. Health now detects stale downloaded revisions after a model upgrade.
+
+Real cumulative API validation on an isolated fixture committed revisions 2, 3, and 4 for Time, Water, and Light in 46.12, 32.42, and 35.51 seconds. Each result changed and every pixel outside the corresponding blend mask was identical. Existing user worlds were not altered.

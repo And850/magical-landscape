@@ -1,0 +1,30 @@
+[
+  {
+    "region": "ground",
+    "force": "growth_time",
+    "seconds": 39.11,
+    "peak_rss_gib": 4.42,
+    "preserved_outside": true
+  },
+  {
+    "region": "mountain",
+    "force": "growth_time",
+    "seconds": 41.59,
+    "peak_rss_gib": 4.84,
+    "preserved_outside": true
+  },
+  {
+    "region": "water",
+    "force": "water",
+    "seconds": 40.75,
+    "peak_rss_gib": 4.36,
+    "preserved_outside": true
+  },
+  {
+    "region": "light",
+    "force": "light",
+    "seconds": 40.26,
+    "peak_rss_gib": 4.14,
+    "preserved_outside": true
+  }
+]
