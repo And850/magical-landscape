@@ -268,3 +268,50 @@ it("resolves completed jobs to the latest world before the next transformation",
   fireEvent.click(screen.getByRole("button", { name: "Apply magic" }));
   await waitFor(() => expect(submittedRevision).toBe("2"));
 });
+
+it("resets a generated world to a blank sketch and does not restore it on refresh", async () => {
+  const view = render(<App />);
+  await waitFor(() =>
+    expect(screen.getByText("Local image generation")).toBeTruthy(),
+  );
+  draw();
+  fireEvent.click(screen.getByRole("button", { name: "Bring world to life" }));
+  expect(
+    (screen.getByRole("button", { name: "Reset canvas" }) as HTMLButtonElement)
+      .disabled,
+  ).toBe(true);
+  await waitFor(() =>
+    expect(screen.getByRole("button", { name: "Apply magic" })).toBeTruthy(),
+  );
+  draw();
+  fireEvent.change(screen.getByLabelText("Describe the magic"), {
+    target: { value: "old roots" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Reset canvas" }));
+  expect(screen.queryByRole("button", { name: "Apply magic" })).toBeNull();
+  expect(screen.queryByLabelText("Describe the magic")).toBeNull();
+  expect(
+    (
+      screen.getByRole("button", {
+        name: "Bring world to life",
+      }) as HTMLButtonElement
+    ).disabled,
+  ).toBe(true);
+  expect(localStorage.getItem("magical-landscape.world")).toBeNull();
+  expect(localStorage.getItem("magical-landscape.job")).toBeNull();
+  view.unmount();
+  render(<App />);
+  await waitFor(() =>
+    expect(screen.getByText("Local image generation")).toBeTruthy(),
+  );
+  expect(screen.queryByRole("button", { name: "Apply magic" })).toBeNull();
+  draw();
+  fireEvent.click(screen.getByRole("button", { name: "Reset canvas" }));
+  expect(
+    (
+      screen.getByRole("button", {
+        name: "Bring world to life",
+      }) as HTMLButtonElement
+    ).disabled,
+  ).toBe(true);
+});

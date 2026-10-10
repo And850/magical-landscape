@@ -84,3 +84,16 @@ def test_landscape_prompt_does_not_invent_unpainted_categories():
         and "forest" not in prompt
         and "structures" not in prompt
     )
+
+
+def test_thin_water_region_describes_its_route_instead_of_only_its_centroid():
+    labels = np.ones((512, 512), dtype=np.uint8)
+    labels[:40] = 0
+    for y in range(50, 490):
+        x = int(440 - (y - 50) * 0.4)
+        labels[y, x : x + 14] = 3
+    _, _, description = imaging.prepare_landscape(Image.fromarray(labels), 384)
+    assert "winding river upper right to lower center" in description
+    labels[:] = 3
+    _, _, sea = imaging.prepare_landscape(Image.fromarray(labels), 384)
+    assert "dominates" in sea and "winding river" not in sea

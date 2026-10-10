@@ -9,6 +9,7 @@ import {
   ArrowRight,
   LoaderCircle,
   Eraser,
+  RotateCcw,
   Check,
   AlertCircle,
 } from "lucide-react";
@@ -220,6 +221,21 @@ export default function App() {
     bump();
     setError("");
   }
+  function resetCanvas() {
+    if (disabled) return;
+    setWorld(null);
+    setArtwork(null);
+    setPixels(new Uint8Array(512 * 512));
+    setTerrain(1);
+    setForce("growth_time");
+    setBrushSize(32);
+    setText("");
+    setJob(null);
+    setError("");
+    localStorage.removeItem(WORLD_KEY);
+    localStorage.removeItem(JOB_KEY);
+    bump();
+  }
   function chooseForce(next: Force) {
     if (disabled || next === force) return;
     setForce(next);
@@ -329,14 +345,24 @@ export default function App() {
                 />
                 {world ? selectedForce.name : TERRAIN[terrain].name} brush
               </span>
-              <button
-                className="text-button"
-                disabled={disabled || !painted}
-                onClick={clear}
-              >
-                <Eraser size={14} />
-                Clear strokes
-              </button>
+              <div className="canvas-actions">
+                <button
+                  className="text-button"
+                  disabled={disabled || !painted}
+                  onClick={clear}
+                >
+                  <Eraser size={14} />
+                  Clear strokes
+                </button>
+                <button
+                  className="text-button"
+                  disabled={disabled}
+                  onClick={resetCanvas}
+                >
+                  <RotateCcw size={14} />
+                  Reset canvas
+                </button>
+              </div>
             </div>
           </section>
           <aside className="tools-panel">

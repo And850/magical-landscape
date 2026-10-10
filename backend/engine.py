@@ -190,7 +190,7 @@ class DiffusionEngine:
                 control_image=edges,
                 prompt=landscape_prompt(description),
                 strength=1.0,
-                controlnet_conditioning_scale=0.25,
+                controlnet_conditioning_scale=0.3,
                 control_guidance_end=0.6,
             ),
             report,

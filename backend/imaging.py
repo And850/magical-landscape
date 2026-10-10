@@ -85,7 +85,28 @@ def prepare_landscape(labels: Image.Image, size: int):
         horizontal = "left" if x < 0.4 else "right" if x > 0.6 else "center"
         vertical = "upper" if y < 0.4 else "lower" if y > 0.6 else "middle"
         extent = " dominates" if len(xx) / (size * size) > 0.45 else ""
-        phrases.append(f"{name}{extent} {vertical} {horizontal}")
+        route = None
+        if label == 3:
+            ry, rx = yy, xx
+            spans = (np.ptp(rx), np.ptp(ry))
+            axis = rx if spans[0] > spans[1] else ry
+            bbox_area = (spans[0] + 1) * (spans[1] + 1)
+            if (
+                max(spans) > size * 0.5
+                and len(rx) / bbox_area < 0.55
+                and len(rx) / (size * size) < 0.2
+            ):
+
+                def position(select):
+                    px, py = rx[select].mean() / size, ry[select].mean() / size
+                    h = "left" if px < 0.4 else "right" if px > 0.6 else "center"
+                    v = "upper" if py < 0.4 else "lower" if py > 0.6 else "middle"
+                    return f"{v} {h}"
+
+                start = position(axis <= np.quantile(axis, 0.15))
+                end = position(axis >= np.quantile(axis, 0.85))
+                route = f"water: winding river {start} to {end}"
+        phrases.append(route or f"{name}{extent} {vertical} {horizontal}")
     return color, Image.fromarray(edge).convert("RGB"), "; ".join(phrases)
 
 
