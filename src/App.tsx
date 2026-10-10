@@ -31,7 +31,7 @@ const JOB_KEY = "magical-landscape.job";
 const FORCES = [
   {
     id: "growth_time" as Force,
-    name: "Growth + Time",
+    name: "Time",
     color: "#a1b887",
     icon: Leaf,
     description:

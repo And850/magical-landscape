@@ -7,7 +7,7 @@ The approved Magical Landscape app is implemented with the agreed seven landscap
 - State/API: serialized jobs, atomic commits, stale-revision protection, preserved current image on failure, current-world restoration, interrupted-job recovery, localhost Host/Origin checks.
 - Frontend: Canvas drawing, labeled region map, force masks, brush sizing, optional text, clear pending strokes, explicit generation, polling/progress/errors and restoration.
 - Review: independent code review findings fixed with regression coverage. Automated verification: 22 backend tests, 8 frontend tests, production build. Browser test source is supplied but browser execution is unavailable.
-- Real workflow: initial generation, cumulative Growth + Time, Water and Light through the API. Exact pixel preservation outside expanded masks checked for every edit. First initial runs took 87.23 and 91.34 seconds on CPU at 384/15. Final regional timings are in assets/measurements.json.
+- Real workflow: initial generation, cumulative Time, Water and Light through the API. Exact pixel preservation outside expanded masks checked for every edit. First initial runs took 87.23 and 91.34 seconds on CPU at 384/15. Final regional timings are in assets/measurements.json.
 - Submission: README, under-500-word write-up, genuine-output results reel under three minutes, public source repository under And850.
 
 ## Remaining environmental limitations

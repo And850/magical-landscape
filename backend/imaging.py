@@ -143,7 +143,7 @@ def composite(original: Image.Image, generated: Image.Image, blend: Image.Image)
 
 def force_prompt(force: str, text: str):
     if force not in RULES:
-        raise ValueError("Choose Growth + Time, Water, or Light.")
+        raise ValueError("Choose Time, Water, or Light.")
     if len(text) > 200:
         raise ValueError("Optional text must be 200 characters or fewer.")
     return f"{RULES[force]}. {STYLE}. " + (

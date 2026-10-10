@@ -29,7 +29,7 @@ slides = [
     ),
     (
         "growth_time",
-        "Growth + Time - selected cumulative iteration",
+        "Time - selected cumulative iteration",
         "Mature vegetation reinterprets the painted region.",
     ),
     (

@@ -6,7 +6,7 @@ Draw a cause. Discover a consequence.
 
 [60-second results reel](docs/assets/demo.mp4) · [Submission write-up](docs/submission.md)
 
-A local creative app for Banana Hacks 2026. Paint a landscape, turn it into fantasy art, then evolve selected regions with Growth + Time, Water, or Light. Each successful transformation becomes the current world. No undo, accounts, hosted inference, or paid API.
+A local creative app for Banana Hacks 2026. Paint a landscape, turn it into fantasy art, then evolve selected regions with Time, Water, or Light. Each successful transformation becomes the current world. No undo, accounts, hosted inference, or paid API.
 
 ## Run
 
@@ -25,14 +25,14 @@ If the environment is already installed, only run `./scripts/run.sh`. Stop exist
 
 1. Paint regions with **Sky, Ground, Hills/Mountains, Water, Trees/Vegetation, Rocks, and Structures**. Unpainted space is sky. Later strokes replace earlier labels. At least one non-Sky region is required.
 2. Select **Bring world to life**. The drawing's colors, boundaries, and semantic positions guide the illustration.
-3. Choose **Growth + Time**, **Water**, or **Light**, paint the region to change, optionally describe its magic, and select **Apply magic**.
+3. Choose **Time**, **Water**, or **Light**, paint the region to change, optionally describe its magic, and select **Apply magic**.
 4. Repeat on the current world. Changing force clears pending strokes. **Clear strokes** clears unapplied marks only. **Reset canvas** starts over with a blank sketch, clearing the artwork, pending strokes, optional text, and saved world selection. Reset is disabled during generation.
 
 Brush sizes range from 8 to 96 pixels, default 32. Optional text is limited to 200 characters. Drawing and submission are disabled during generation; the app shows actual diffusion-step progress. A failed generation retains the image, strokes, and text. Refresh restores the current world and resumes a known pending job.
 
 ## Magical forces
 
-- **Growth + Time:** mature plants, spreading roots/vines/moss, weathered structures, nature reclaiming ruins.
+- **Time:** mature plants, spreading roots/vines/moss, weathered structures, nature reclaiming ruins.
 - **Water:** primarily floods, pools, carved channels, and submerged structures, with modest vegetation at wet edges.
 - **Light:** magical illumination, luminous blooms, awakened structures, glowing symbols, and suggested hidden paths.
 
@@ -64,7 +64,7 @@ npm run build
 .venv/bin/python scripts/verify_live.py
 ```
 
-The benchmark generates two different layouts and cumulative Growth + Time → Water → Light images in `.runtime/benchmark/`, recording timings and the selected profile. Inspect the images as well as the timings. It tries the reduced profile if the default fails or warmed edits exceed 120 seconds.
+The benchmark generates two different layouts and cumulative Time → Water → Light images in `.runtime/benchmark/`, recording timings and the selected profile. Inspect the images as well as the timings. It tries the reduced profile if the default fails or warmed edits exceed 120 seconds.
 
 The implementation environment could not expose the Mac's Metal GPU and denied browser preview access. CPU inference, automated backend tests, in-memory UI tests, and production compilation can be verified here; native GPU latency and browser visual QA must be checked on an ordinary Mac session. Browser workflow coverage is supplied in `tests/app.spec.ts`; run `npm run test:e2e` where Chromium is allowed, after `npx playwright install chromium`.
 
