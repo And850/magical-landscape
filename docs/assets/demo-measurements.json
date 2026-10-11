@@ -1,0 +1,35 @@
+{
+  "device": "cpu",
+  "size": 384,
+  "steps": 15,
+  "models": {
+    "create": "Stable Diffusion 1.5 + Canny ControlNet",
+    "edit": "DreamShaper 8 Inpainting"
+  },
+  "records": [
+    {
+      "stage": "create",
+      "seconds": 85.31,
+      "revision": 1
+    },
+    {
+      "stage": "growth_time",
+      "seconds": 46.66,
+      "revision": 2,
+      "preserved_outside": true
+    },
+    {
+      "stage": "water",
+      "seconds": 33.06,
+      "revision": 3,
+      "preserved_outside": true
+    },
+    {
+      "stage": "light",
+      "seconds": 35.75,
+      "revision": 4,
+      "preserved_outside": true
+    }
+  ],
+  "presentation": "Reconstructed composition sketch; genuine cumulative outputs; generation waits shortened."
+}

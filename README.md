@@ -51,7 +51,7 @@ React/TypeScript/Vite and Canvas 2D frontend; FastAPI/Pillow/OpenCV/PyTorch/Diff
 - Initial defaults were tuned after flat-image failures: strength **1.0**, ControlNet scale **0.30**, guidance ending at **0.6**. Time uses strength **0.85** and keeps the profile’s actual diffusion-step count; Water/Light use strength **0.95**. Both pipelines use guidance scale **7**. Time prompts vegetation and weathered existing surfaces, rather than asking for new ruins or structures.
 - Thin, elongated water regions include a coarse river route rather than only their centroid. Only painted categories appear; dominant regions are identified without inventing unpainted terrain. The fixed art prompt and selected force come before optional text. Stable Diffusion's text encoder has a finite token budget, so unusually dense descriptions may be truncated.
 
-Model revisions are pinned in `model-revisions.json`; Python and Node dependencies are locked. Model licenses are CreativeML OpenRAIL-M for the Stable Diffusion models and the license listed on the ControlNet model card. Model output checking remains enabled.
+Model revisions are pinned in `model-revisions.json`; Python and Node dependencies are locked. Stable Diffusion 1.5 and DreamShaper 8 Inpainting use CreativeML OpenRAIL-M; Canny ControlNet is labeled OpenRAIL on its model card. The linked model cards contain the license terms. Model output checking remains enabled.
 
 ## Verify
 
@@ -66,15 +66,17 @@ npm run build
 
 The benchmark generates two different layouts and cumulative Time → Water → Light images in `.runtime/benchmark/`, recording timings and the selected profile. Inspect the images as well as the timings. It tries the reduced profile if the default fails or warmed edits exceed 120 seconds.
 
-The implementation environment could not expose the Mac's Metal GPU and denied browser preview access. CPU inference, automated backend tests, in-memory UI tests, and production compilation can be verified here; native GPU latency and browser visual QA must be checked on an ordinary Mac session. Browser workflow coverage is supplied in `tests/app.spec.ts`; run `npm run test:e2e` where Chromium is allowed, after `npx playwright install chromium`.
+Final verification on October 11 passed 26 backend tests, 9 frontend tests, the production build, and the Playwright browser workflow at a 1440 × 1000 viewport with 2× pixel density. Browser coverage includes drawing, generation state, all three forces, failed-edit retry, refresh restoration, and reset. Real-model inference is checked separately through the API; the browser workflow test uses stubbed responses. Run `npx playwright install chromium` before `npm run test:e2e`. Browser screenshots of the create and restored-world stages were visually inspected.
 
 ## Measured results
+
+On October 11, an Apple M1 Pro with 16 GB unified memory completed the full offline API workflow on **Metal (MPS), float16, 512 × 512 / 20 steps**. Initial landscapes took **47.88 and 32.80 seconds**; cumulative Time, Water, and Light took **23.83, 21.84, and 20.81 seconds**. All edits changed the image and preserved every pixel outside the expanded blend mask. These are single-run wall-clock measurements, not a broad performance guarantee. See [Metal measurements](docs/assets/metal-measurements.json). Visual review found more vegetation with Time and golden illumination with Light, but Water also introduced an unexpected tower.
 
 Actual offline CPU generation at 384 × 384 / 15 steps produced two different landscapes in 87–91 seconds. Final regional edits completed in 35.54–39.22 seconds; measurements are in [measurements.json](docs/assets/measurements.json). The API verification checks every pixel outside the expanded mask after each successful edit.
 
 DreamShaper force-edit probes completed in 39–42 seconds with 4.1–4.8 GiB peak process memory. See [the model comparison](docs/model-comparison.md) for images, settings, and limitations.
 
-The results reel predates the DreamShaper upgrade and shows selected cumulative iterations from genuine local runs, with waiting periods omitted. It is not a browser interaction recording. Force effects vary by seed, region, and image context; golden illumination required a more focused edit.
+The approved 60-second, 1080p results reel uses Stable Diffusion 1.5 + Canny for creation and DreamShaper 8 Inpainting for cumulative edits. Its CPU timings were 85.31 seconds for creation, 46.66 for Time, 33.06 for Water, and 35.75 for Light; see [demo measurements](docs/assets/demo-measurements.json). Generation waits are explicitly shortened. The second slide is labeled **reconstructed composition sketch**: it was redrawn afterward to match the initial AI landscape and is not the actual generation input. The AI outputs are genuine and were not regenerated for that sketch revision. The soundtrack is an original synthesized ambient score. The reel is not a browser interaction recording. Force effects vary by seed, region, and image context; unwanted objects and inconsistent tree growth remain possible.
 
 ## Storage and recovery
 

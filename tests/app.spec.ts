@@ -84,7 +84,7 @@ test("draw, generate, select forces, recover from failure, and restore on refres
     page.getByRole("button", { name: "Bring world to life" }),
   ).toBeDisabled();
   await expect(
-    page.getByRole("button", { name: "Ground", exact: true }),
+    page.getByRole("button", { name: /^Ground\b/ }),
   ).toBeVisible();
   await draw(page);
   await expect(
@@ -96,7 +96,7 @@ test("draw, generate, select forces, recover from failure, and restore on refres
     page.getByRole("button", { name: "Apply magic" }),
   ).toBeDisabled();
   await draw(page);
-  await page.getByRole("button", { name: "Water", exact: true }).click();
+  await page.getByRole("button", { name: /^Water\b/ }).click();
   await expect(
     page.getByRole("button", { name: "Apply magic" }),
   ).toBeDisabled();
@@ -119,4 +119,17 @@ test("draw, generate, select forces, recover from failure, and restore on refres
   await page.reload();
   await expect(page.getByRole("button", { name: "Apply magic" })).toBeVisible();
   await expect(page.getByRole("button", { name: /undo/i })).toHaveCount(0);
+  for (const force of ["Time", "Light"]) {
+    await page.getByRole("button", { name: new RegExp(`^${force}\\b`) }).click();
+    await draw(page);
+    await page.getByRole("button", { name: "Apply magic" }).click();
+    await expect(page.getByRole("button", { name: "Apply magic" })).toBeDisabled();
+    await expect(page.getByLabel("Describe the magic")).toHaveValue("");
+  }
+  await page.getByRole("button", { name: "Reset canvas" }).click();
+  await expect(page.getByRole("button", { name: "Bring world to life" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Apply magic" })).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Bring world to life" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Apply magic" })).toHaveCount(0);
 });

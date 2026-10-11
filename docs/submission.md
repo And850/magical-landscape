@@ -1,6 +1,6 @@
 # Magical Landscape
 
-**One-paragraph description:** Magical Landscape turns drawing into a way to change an imaginary world. Paint its initial geography with labeled brushes, bring it to life as a fantasy illustration, then apply Time, Water, or Light to selected regions. Roots reclaim weathered ruins, water reshapes the terrain, and light awakens forgotten places. Every successful transformation becomes the starting point for the next.
+**One-paragraph description:** Magical Landscape turns drawing into a way to change an imaginary world. Paint its initial geography with labeled brushes, bring it to life as a fantasy illustration, then apply Time, Water, or Light to selected regions. Time encourages vegetation and weathering, Water suggests floods and channels, and Light adds magical illumination. Every successful transformation becomes the starting point for the next.
 
 ## What we built and why
 
@@ -20,4 +20,8 @@ We used pretrained Stable Diffusion 1.5, DreamShaper 8 Inpainting, and Canny Con
 
 Repository: https://github.com/And850/magical-landscape
 
-Demo: [60-second local-generation results reel](assets/demo.mp4). This shows genuine generated outputs from selected cumulative iterations, not a browser interaction recording. Native Metal and browser visual QA remain unverified in the restricted implementation environment.
+Demo: [60-second local-generation results reel](https://github.com/And850/magical-landscape/blob/main/docs/assets/demo.mp4).
+
+Direct video file: https://raw.githubusercontent.com/And850/magical-landscape/main/docs/assets/demo.mp4
+
+The reel shows genuine cumulative local outputs, with generation waits shortened. Its second slide is explicitly labeled as a reconstructed composition sketch, drawn afterward to match the generated landscape. It is a captioned results reel, not a browser interaction recording. Browser workflow tests and native Metal inference were checked separately. Generative effects remain approximate and can introduce unexpected objects.
